@@ -41,7 +41,7 @@ async function downloadDrivers() {
 
   // Download available drivers
   for ( const driver of driversToDownload ) {
-    await downloadFile( driver ).then( ( fileName ) => {
+    await prepareDownload( driver ).then( ( fileName ) => {
       if ( fileName.match( /.exe/gi ) ) {
         return;
       }
@@ -58,20 +58,7 @@ async function downloadDrivers() {
   }
 };
 
-function decompressArchive( fileName ) {
-  return new Promise ( ( resolve, reject ) => {
-    if ( fileName.match( /.zip/g ) ) {
-      fs.createReadStream(`./lib/${ fileName }` ).pipe( unzip.Extract( { path: './lib' } ) );
-      resolve();
-    }
-
-    targz.decompress( { src: `./lib/${ fileName }`, dest: './lib' }, () => {
-      resolve();
-    } );
-  } );
-}
-
-async function downloadFile( driver ) {
+async function prepareDownload( driver ) {
   if ( !driver ) {
     console.log( '[!] Download error: Driver name must be provided.' );
     return;
@@ -90,6 +77,10 @@ async function downloadFile( driver ) {
     } );
   } );
 };
+
+/*
+ * Downloads file from provided URL
+ */
 
 function download( url ) {
   return new Promise( ( resolve, reject ) => {
@@ -114,10 +105,27 @@ function download( url ) {
       } );
     } );
   } );
-}
+};
 
 /*
- * Creates download link from provided base URL.
+ * Extracts archive
+ */
+
+function decompressArchive( fileName ) {
+  return new Promise ( ( resolve, reject ) => {
+    if ( fileName.match( /.zip/g ) ) {
+      fs.createReadStream(`./lib/${ fileName }` ).pipe( unzip.Extract( { path: './lib' } ) );
+      resolve();
+    }
+
+    targz.decompress( { src: `./lib/${ fileName }`, dest: './lib' }, () => {
+      resolve();
+    } );
+  } );
+};
+
+/*
+ * Creates download link from provided base URL
  */
 
 async function createDownloadLink( url, driver ) {
@@ -177,7 +185,7 @@ async function createDownloadLink( url, driver ) {
     }
 
     return downloadLink;
-}
+};
 
 /*
  * Requests to provided URL and returns website's body.
@@ -202,4 +210,4 @@ function getBody( url ) {
       } );
     } );
   } );
-}
+};
