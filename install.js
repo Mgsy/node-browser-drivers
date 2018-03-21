@@ -2,6 +2,7 @@ const https = require( 'follow-redirects' ).https;
 const jsdom = require( 'jsdom' );
 const { JSDOM } = jsdom;
 const unzip = require( 'unzip' );
+const targz = require( 'targz' );
 const process = require( 'process' );
 const fs = require( 'fs' );
 
@@ -21,14 +22,17 @@ async function downloadDrivers() {
     console.log( `[*] Downloading drivers for Windows ${ arch }` );
 
     driversToDownload = [ 'chromeDriver', 'geckoDriver', 'ieDriver', 'edgeDriver' ];
+
   } else if ( platform == 'darwin' ) {
     console.log( `[*] Downloading drivers for MacOS ${ arch }` );
 
     driversToDownload = [ 'chromeDriver', 'geckoDriver' ];
+
   } else if ( platform == 'linux' ) {
     console.log( `[*] Downloading drivers for Linux ${ arch }` );
 
     driversToDownload = [ 'chromeDriver', 'geckoDriver' ];
+
   } else {
     console.log( `[!] OS not supported. Aborting.` );
 
@@ -38,13 +42,34 @@ async function downloadDrivers() {
   // Download available drivers
   for ( const driver of driversToDownload ) {
     await downloadFile( driver ).then( ( fileName ) => {
-      console.log( '[*] Unzipping...');
+      if ( fileName.match( /.exe/gi ) ) {
+        return;
+      }
 
-      // Deletes the file after unzip
-      // fs.unlinkSync( `./lib/${ fileName }` );
+      console.log( '[*] Extracting...');
+
+      decompressArchive( fileName ).then( () => {
+        console.log( '[*] Done.' );
+
+        // Deletes the file after unzip
+        fs.unlinkSync( `./lib/${ fileName }` );
+      } );
     } );
   }
 };
+
+function decompressArchive( fileName ) {
+  return new Promise ( ( resolve, reject ) => {
+    if ( fileName.match( /.zip/g ) ) {
+      fs.createReadStream(`./lib/${ fileName }` ).pipe( unzip.Extract( { path: './lib' } ) );
+      resolve();
+    }
+
+    targz.decompress( { src: `./lib/${ fileName }`, dest: './lib' }, () => {
+      resolve();
+    } );
+  } );
+}
 
 async function downloadFile( driver ) {
   if ( !driver ) {
