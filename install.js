@@ -141,8 +141,8 @@ async function createDownloadLink( url, driver ) {
     const dom = new JSDOM( siteHtml );
 
     if ( driver == 'chromeDriver' ) {
-      const element = dom.window.document.querySelector( `#sites-canvas-main-content > table > tbody
-                            > tr > td > div > h2 > b > a` ).textContent;
+      const element = dom.window.document.querySelector( '#sites-canvas-main-content > table > tbody' +
+                            '> tr > td > div > h2 > b > a' ).textContent;
       const driverVersion = element.replace( /[a-z ]/gi, '' );
 
       downloadLink = `https://chromedriver.storage.googleapis.com/${ driverVersion }/chromedriver_${ os }.zip`
@@ -150,11 +150,11 @@ async function createDownloadLink( url, driver ) {
     }
 
     if ( driver == 'geckoDriver' ) {
-      const element = dom.window.document.querySelector( `#js-repo-pjax-container
-                                                          > div.container.new-discussion-timeline.experiment-repo-nav
-                                                          > div.repository-content > div.position-relative.border-top
-                                                          > div.release.clearfix.label-latest
-                                                          > div.release-body.commit.open.float-left > div.release-header > h1 > a` );
+      const element = dom.window.document.querySelector( '#js-repo-pjax-container' +
+                                                          '> div.container.new-discussion-timeline.experiment-repo-nav' +
+                                                          '> div.repository-content > div.position-relative.border-top' +
+                                                          '> div.release.clearfix.label-latest' +
+                                                          '> div.release-body.commit.open.float-left > div.release-header > h1 > a' );
 
       const driverVersion = element.textContent;
 
@@ -170,15 +170,15 @@ async function createDownloadLink( url, driver ) {
     }
 
     if ( driver == 'ieDriver' ) {
-      const elementX86 = dom.window.document.querySelector( `#mainContent > p:nth-child(11) > a:nth-child(1)` );
-      const elementX64 = dom.window.document.querySelector( `#mainContent > p:nth-child(11) > a:nth-child(2)` );
+      const elementX86 = dom.window.document.querySelector( '#mainContent > p:nth-child(11) > a:nth-child(1)' );
+      const elementX64 = dom.window.document.querySelector( '#mainContent > p:nth-child(11) > a:nth-child(2)' );
 
       arch == 'x86' ? downloadLink = elementX86.getAttribute( 'href' ) : downloadLink = elementX64.getAttribute( 'href' );
 
     }
 
     if ( driver == 'edgeDriver' ) {
-      const element = dom.window.document.querySelector( `#downloads > div > div:nth-child(2) > ul > li:nth-child(1) > a` );
+      const element = dom.window.document.querySelector( '#downloads > div > div:nth-child(2) > ul > li:nth-child(1) > a' );
 
       downloadLink = element.getAttribute( 'href' );
 
