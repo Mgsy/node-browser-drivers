@@ -9,9 +9,9 @@
   "author": "Mgsy",
   "license": "ISC",
   "dependencies": {
+    "adm-zip": "^0.4.7",
     "follow-redirects": "^1.4.1",
     "jsdom": "^11.6.2",
-    "targz": "^1.0.1",
-    "unzip": "^0.1.11"
+    "targz": "^1.0.1"
   }
 }

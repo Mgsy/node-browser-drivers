@@ -1,7 +1,7 @@
 const https = require( 'follow-redirects' ).https;
 const jsdom = require( 'jsdom' );
 const { JSDOM } = jsdom;
-const unzip = require( 'unzip' );
+const AdmZip = require( 'adm-zip' );
 const targz = require( 'targz' );
 const process = require( 'process' );
 const fs = require( 'fs' );
@@ -114,7 +114,9 @@ function download( url ) {
 function decompressArchive( fileName ) {
   return new Promise ( ( resolve, reject ) => {
     if ( fileName.match( /.zip/g ) ) {
-      fs.createReadStream(`./lib/${ fileName }` ).pipe( unzip.Extract( { path: './lib' } ) );
+      let archive = new AdmZip( `./lib/${ fileName }` );
+      archive.extractAllTo( './lib', true );
+      
       resolve();
     }
 
