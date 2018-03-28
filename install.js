@@ -28,7 +28,7 @@ async function downloadDrivers() {
   } else if ( platform == 'darwin' ) {
     console.log( `[*] Downloading drivers for MacOS ${ arch }` );
 
-    driversToDownload = [ 'ieDriver' ];
+    driversToDownload = [ 'chromeDriver', 'geckoDriver' ];
 
   } else if ( platform == 'linux' ) {
     console.log( `[*] Downloading drivers for Linux ${ arch }` );
