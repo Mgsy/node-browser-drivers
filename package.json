@@ -1,13 +1,20 @@
 {
-  "name": "node-selenium-browser-drivers",
+  "name": "selenium-browser-drivers",
   "version": "1.0.0",
-  "description": "",
+  "description": "Script that downloads latest browser drivers",
   "main": "install.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "download": "node install.js"
+    "postinstall": "node install.js"
   },
-  "author": "Mgsy",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mgsy/node-selenium-browser-drivers.git"
+  },
+  "author": {
+      "name": "Mgsy",
+      "email": "kacpertomporowski@gmail.com"
+  },
+  "bugs": "https://github.com/Mgsy/node-selenium-browser-drivers/issues",
   "license": "ISC",
   "dependencies": {
     "adm-zip": "^0.4.7",
