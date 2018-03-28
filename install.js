@@ -1,10 +1,12 @@
 const https = require( 'follow-redirects' ).https;
+const http = require( 'http' );
 const jsdom = require( 'jsdom' );
 const { JSDOM } = jsdom;
 const AdmZip = require( 'adm-zip' );
 const targz = require( 'targz' );
 const process = require( 'process' );
 const fs = require( 'fs' );
+const urlExpander = require( 'expand-url' );
 
 ( function install() {
   downloadDrivers();
@@ -26,7 +28,7 @@ async function downloadDrivers() {
   } else if ( platform == 'darwin' ) {
     console.log( `[*] Downloading drivers for MacOS ${ arch }` );
 
-    driversToDownload = [ 'chromeDriver', 'geckoDriver' ];
+    driversToDownload = [ 'ieDriver' ];
 
   } else if ( platform == 'linux' ) {
     console.log( `[*] Downloading drivers for Linux ${ arch }` );
@@ -70,7 +72,7 @@ async function prepareDownload( driver ) {
   const edgeDriverBaseUrl = 'https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/';
 
   let downloadLink = await createDownloadLink( eval( `${ driver }BaseUrl` ), driver );
-
+  console.log( downloadLink );
   return new Promise( ( resolve, reject ) => {
     download( downloadLink ).then( ( fileName ) => {
       resolve( fileName );
@@ -83,13 +85,17 @@ async function prepareDownload( driver ) {
  */
 
 function download( url ) {
+  let protocolInstance;
+
+  url.match( /^https/ ) ? protocolInstance = https : protocolInstance = http;
+
   return new Promise( ( resolve, reject ) => {
     let fileName = url.split( '/' ).pop();
     let file = fs.createWriteStream( `./lib/${ fileName }` );
 
     console.log( `[*] Downloading ${ fileName }` );
 
-    https.get( url, ( response ) => {
+    protocolInstance.get( url, ( response ) => {
       response.pipe( file );
 
       file.on( 'finish', () => {
@@ -116,7 +122,7 @@ function decompressArchive( fileName ) {
     if ( fileName.match( /.zip/g ) ) {
       let archive = new AdmZip( `./lib/${ fileName }` );
       archive.extractAllTo( './lib', true );
-      
+
       resolve();
     }
 
@@ -175,7 +181,13 @@ async function createDownloadLink( url, driver ) {
       const elementX86 = dom.window.document.querySelector( '#mainContent > p:nth-child(11) > a:nth-child(1)' );
       const elementX64 = dom.window.document.querySelector( '#mainContent > p:nth-child(11) > a:nth-child(2)' );
 
-      arch == 'x86' ? downloadLink = elementX86.getAttribute( 'href' ) : downloadLink = elementX64.getAttribute( 'href' );
+      const shortenUrlX86 = elementX86.getAttribute( 'href' );
+      const shortenUrlX64 = elementX64.getAttribute( 'href' );
+
+      let expandedUrlX86 = await expandUrl( shortenUrlX86 );
+      let expandedUrlX64 = await expandUrl( shortenUrlX64 );
+
+      arch == 'x86' ? downloadLink = expandedUrlX86 : downloadLink = expandedUrlX64;
 
     }
 
@@ -194,8 +206,12 @@ async function createDownloadLink( url, driver ) {
  */
 
 function getBody( url ) {
+  let protocolInstance;
+
+  url.match( /^https/ ) ? protocolInstance = https : protocolInstance = http;
+
   return new Promise( ( resolve, reject ) => {
-    https.get( url, resp => {
+    protocolInstance.get( url, resp => {
       resp.setEncoding( 'utf-8' );
       let body = '';
 
@@ -213,3 +229,11 @@ function getBody( url ) {
     } );
   } );
 };
+
+function expandUrl( url ) {
+  return new Promise( ( resolve, reject ) => {
+    urlExpander.expand( url, ( err, link ) => {
+      resolve( link );
+    } );
+  } );
+}
