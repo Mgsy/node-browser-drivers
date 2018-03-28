@@ -72,7 +72,7 @@ async function prepareDownload( driver ) {
   const edgeDriverBaseUrl = 'https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/';
 
   let downloadLink = await createDownloadLink( eval( `${ driver }BaseUrl` ), driver );
-  console.log( downloadLink );
+
   return new Promise( ( resolve, reject ) => {
     download( downloadLink ).then( ( fileName ) => {
       resolve( fileName );
