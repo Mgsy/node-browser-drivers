@@ -141,9 +141,15 @@ async function createDownloadLink( url, driver ) {
     const arch = process.arch;
 
     let downloadLink;
-    let os = 'win32';
+    let os;
 
-    platform == 'darwin' ? os = `mac${ arch.replace( /^x/, '' ) }` : os = `linux${ arch.replace( /^x/, '' ) }`;
+    if ( platform == 'darwin' ) {
+      os = `mac${ arch.replace( /^x/, '' ) }`;
+    } else if ( platform == 'linux' ) {
+      os = `linux${ arch.replace( /^x/, '' ) }`;
+    } else {
+      os = 'win32';
+    };
 
     const siteHtml = await getBody( url );
     const dom = new JSDOM( siteHtml );
