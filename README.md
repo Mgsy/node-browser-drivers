@@ -3,7 +3,7 @@ This script downloads proper drivers for Selenium.
 
 ## Installation
 ```
-npm install node-selenium-browser-drivers
+npm install selenium-browser-drivers
 ```
 
 All drivers would be downloaded in the latest versions and always stay up to date.
