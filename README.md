@@ -1,5 +1,11 @@
 # Selenium browser drivers
-This script downloads proper drivers for Selenium.
+> This script downloads proper drivers for Selenium.
+
+Supported drivers:
+* ChromeDriver for Windows/Mac/Linux
+* GeckoDriver for Windows/Mac/Linux
+* IEDriver
+* EdgeDriver
 
 ## Installation
 ```
