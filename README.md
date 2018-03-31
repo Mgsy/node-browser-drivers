@@ -8,8 +8,24 @@ Supported drivers:
 * EdgeDriver
 
 ## Installation
+### NPM
+Run this command in your project destination.
+
 ```
 npm install selenium-browser-drivers
+```
+
+### Git
+Clone the repository.
+
+```
+git clone https://github.com/Mgsy/node-selenium-browser-drivers.git
+```
+
+Browse to the download destination and install dependencies.
+
+```
+npm install
 ```
 
 All drivers would be downloaded in the latest versions and always stay up to date.
