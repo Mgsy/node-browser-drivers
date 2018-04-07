@@ -1,4 +1,4 @@
-# Selenium browser drivers
+# Selenium browser drivers [![Build Status](https://travis-ci.org/Mgsy/node-selenium-browser-drivers.svg?branch=master)](https://travis-ci.org/Mgsy/node-selenium-browser-drivers)
 > This script downloads proper drivers for Selenium.
 
 Supported drivers:
