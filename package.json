@@ -11,16 +11,18 @@
     "url": "git+https://github.com/Mgsy/node-selenium-browser-drivers.git"
   },
   "author": {
-      "name": "Mgsy",
-      "email": "kacpertomporowski@gmail.com"
+    "name": "Mgsy",
+    "email": "kacpertomporowski@gmail.com"
   },
   "bugs": "https://github.com/Mgsy/node-selenium-browser-drivers/issues",
   "license": "ISC",
   "dependencies": {
     "adm-zip": "^0.4.7",
+    "chai": "^4.1.2",
     "expand-url": "^0.1.3",
     "follow-redirects": "^1.4.1",
     "jsdom": "^11.6.2",
+    "mocha": "^5.0.5",
     "targz": "^1.0.1"
   }
 }
